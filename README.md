@@ -17,7 +17,7 @@
 
 ## :OOP: 面向对象
 
-- [GoF设计模式](https://github.com/ABugKiller/ZYD-Notes/main/notes/GoF设计模式.md)
+- [GoF设计模式](https://github.com/ABugKiller/ZYD-Notes/blob/master/main/notes/GoF设计模式.md)
 
 
 ## :memo: 后记 
