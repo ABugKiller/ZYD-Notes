@@ -1,33 +1,32 @@
-[🎉 面试进阶指南已上线](https://xiaozhuanlan.com/CyC2018)
 <!-- GFM-TOC -->
 * [一、概述](#一概述)
-* [二、创建型模式](#二创建型模式)
-    * [1. 简单工厂模式（Simple Factory）](#1-单例singleton)
-    * [2. 工厂方法模式（Factory Method）](#2-简单工厂simple-factory)
-    * [3. 抽象工厂模式（Abstract Factory）](#3-工厂方法factory-method)
-    * [4. 单例模式（Singletom）](#4-抽象工厂abstract-factory)
-    * [5. 创建者模式（Builder）](#5-生成器builder)
-    * [6. 原型模式（Prototype）](#6-原型模式prototype)
-* [三、结构型模式](#四结构型)
-    * [1. 适配器模式（Adapter）](#1-适配器adapter)
-    * [2. 外观模式（Facade）](#2-桥接bridge)
-    * [3. 享元模式（Flyweight）](#3-组合composite)
-    * [4. 组合模式（Composite）](#4-装饰decorator)
-    * [5. 装饰器模式（Decorator）](#5-外观facade)
-    * [6. 代理模式（Proxy）](#6-享元flyweight)
-    * [7. 桥接模式（Bridge）](#7-代理proxy)
-* [四、行为型模式](#三行为型)
-    * [1. 策略模式（Strategy）](#1-责任链chain-of-responsibility)
-    * [2. 状态模式（State）](#2-命令command)
-    * [3. 职责链模式（Chain of Responsibility）](#3-解释器interpreter)
-    * [4. 观察者模式（Observer）](#4-迭代器iterator)
-    * [5. 模板方法模式（Template Method）](#5-中介者mediator)
-    * [6. 命令模式（Command）](#6-备忘录memento)
-    * [7. 备忘录模式（Memento）](#7-观察者observer)
-    * [8. 迭代器模式（Iterator）](#8-状态state)
-    * [9. 调停者模式（Mediator）](#9-策略strategy)
-    * [10. 解释器模式（Interpreter）](#10-模板方法template-method)
-    * [11. 访问者模式（Visitor）](#11-访问者visitor)
+* [二、创建型模式](#二、创建型模式)
+    * [1. 简单工厂模式（Simple Factory）](#1.-简单工厂模式（simple-factory）)
+    * [2. 工厂方法模式（Factory Method）](#2.-工厂方法模式（factory-method）)
+    * [3. 抽象工厂模式（Abstract Factory）](#3.-抽象工厂模式（abstract-factory）)
+    * [4. 单例模式（Singletom）](#4.-单例模式（singletom）)
+    * [5. 创建者模式（Builder）](#5.-创建者模式（builder）)
+    * [6. 原型模式（Prototype）](#6.-原型模式（prototype）)
+* [三、结构型模式](#三、结构型模式)
+    * [1. 适配器模式（Adapter）](#1.-适配器模式（adapter）)
+    * [2. 外观模式（Facade）](#2.-外观模式（facade）)
+    * [3. 享元模式（Flyweight）](#3.-享元模式（flyweight）)
+    * [4. 组合模式（Composite）](#4.-组合模式（composite）)
+    * [5. 装饰器模式（Decorator）](#5.-装饰器模式（decorator）)
+    * [6. 代理模式（Proxy）](#6.-代理模式（proxy）)
+    * [7. 桥接模式（Bridge）](#7.-桥接模式（bridge）)
+* [四、行为型模式](#四、行为型模式)
+    * [1. 策略模式（Strategy）](#1.-策略模式（strategy）)
+    * [2. 状态模式（State）](#2.-状态模式（state）)
+    * [3. 职责链模式（Chain of Responsibility）](#3.-职责链模式（chain-of-responsibility）)
+    * [4. 观察者模式（Observer）](#4.-观察者模式（observer）)
+    * [5. 模板方法模式（Template Method）](#5.-模板方法模式（template-method）)
+    * [6. 命令模式（Command）](#6.-命令模式（command）)
+    * [7. 备忘录模式（Memento）](#7.-备忘录模式（memento）)
+    * [8. 迭代器模式（Iterator）](#8.-迭代器模式（iterator）)
+    * [9. 调停者模式（Mediator）](#9.-调停者模式（mediator）)
+    * [10. 解释器模式（Interpreter）](#10.-解释器模式（interpreter）)
+    * [11. 访问者模式（Visitor）](#11.-访问者模式（visitor）)
 * [参考资料](#参考资料)
 <!-- GFM-TOC -->
 
@@ -88,14 +87,14 @@
 这个模式存在的问题，即实现类的创建过程修改了之后，有时工厂的实现也得跟着修改。虽然对客户端的接口是保持不变的，但是对工厂本身的修改还是有点不符合开闭原则。解决这个问题的答案是工厂方法模式。
 
 ### 实例 
-本文将以一个创建“运载工具”的实例的例子来介绍简单工厂模式。 
+本文将以一个创建“水果”的实例的例子来介绍简单工厂模式。 
 
 ### 类图
 <div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
 
 ### 编码实现
 步骤一：定义好工厂要生成的产品的抽象
-```
+```java
 /**
  * 水果的抽象
  *
@@ -116,7 +115,7 @@ public abstract class Fruit {
 ```
 
 步骤二：给抽象的产品定义集中具体的实现
-```aidl
+```java
 /**
  * Apple
  *
@@ -131,7 +130,7 @@ public class Apple extends Fruit {
     }
 }
 ```
-```aidl
+```java
 /**
  * 香蕉
  *
@@ -146,7 +145,7 @@ public class Banana extends Fruit {
     }
 }
 ```
-```aidl
+```java
 /**
  * 西瓜
  *
@@ -163,7 +162,7 @@ public class Watermelon extends Fruit {
 ```
 
 步骤三：定义一个水果类型的枚举
-```aidl
+```java
 /**
  * 水果类型的枚举
  *
@@ -190,7 +189,7 @@ public enum FruitType {
 ```
 
 步骤四：定义水果的工厂
-```aidl
+```java
 /**
  * 水果的工厂
  *
@@ -214,7 +213,7 @@ public class FruitFactory {
 ```
 
 步骤五：调用工厂的客户端
-```aidl
+```java
 /**
  * 客户端调用
  *
@@ -235,68 +234,689 @@ public class Client {
         fruit.eatFruit("ad");
     }
 }
-
 ```
-
-
-```mermaid
-graph TD
-A[模块A] -->|A1| B(模块B)
-B --> C{判断条件C}
-C -->|条件C1| D[模块D]
-C -->|条件C2| E[模块E]
-C -->|条件C3| F[模块F]
-```
-
 
 
 ## 2. 工厂方法模式（Factory Method）
 
+### 原理图
+<div align="center"> <img src="pics/design-pattern/2-工厂方法模式原理图.png" width="700"/> </div><br>
+
+### 角色以及职责 
+* 抽象产品： 工厂产物的抽象。工厂所要创建的实例的类都继承于这个。 
+* 具体产品： 工厂的具体产品。所有的具体产品都是抽象产品的一个实现类。 
+* 抽象工厂： 工厂类的抽象。 
+* 具体工厂： 创建产品实例的具体工厂类。
+
+### 适用场景 
+创建产品对象的过程比较复杂，客户端并不关心如何创建产品对象，只想使用产品。此外产品的类型比较多，编写代码的时候没有可能去完全枚举所有的具体产品，未来还有可能会增加。
+
+### 简单工厂模式分析 
+工厂方法模式（Factory Method）是简单工厂模式（Simple Factory）的一个升级版，通过对工厂本身也抽象一层，实现了工厂自身可以在完全满足开闭原则的情况下的可扩展性。当未来需要创建新的产品的对象的时候，只需要新增一个负责创建新产品的工厂即可。 
+
+不过工厂方法模式也存在自己的问题！工厂方法模式会使客户端的调用过程变得更复杂。
+
+### 实例 
+本文将以一个“水果加工”的实例的例子来介绍工厂方法模式。
+
+### 编码实现
+步骤一：定义好工厂要生成的产品的抽象
+```java
+/**
+ * 水果抽象类
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/31 18:46
+ */
+public abstract class Fruit {
+
+    /**
+     * 加工水果
+     * @author:ABugKiller
+     * @date:Created in 2019/1/31 18:47
+     * @return:
+     */
+    public abstract void process();
+}
+```
+
+步骤二：给抽象的产品定义集中具体的实现
+```java
+/**
+ * 苹果
+ * @author:ABugKiller
+ * @date:Created in 2019/1/31 18:47
+ */
+public class Apple extends Fruit {
+    @Override
+    public void process() {
+        System.out.println("苹果加工完毕");
+    }
+}
+```
+
+```java
+/**
+ * 香蕉
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/31 18:48
+ */
+public class Banana extends Fruit {
+    @Override
+    public void process() {
+        System.out.println("香蕉加工完毕");
+    }
+}
+```
+
+```java
+/**
+ * 西瓜
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/31 18:48
+ */
+public class Watermelon extends Fruit {
+    @Override
+    public void process() {
+        System.out.println("西瓜加工完毕");
+    }
+}
+```
+
+步骤三：定义一个工厂的抽象
+```java
+/**
+ * 水果工厂的抽象
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/31 18:39
+ */
+public interface FruitFactory {
+
+    /**
+     * 创建水果工厂
+     * @author:ABugKiller
+     * @date:Created in 2019/1/31 18:40
+     * @return:
+     */
+    public Fruit newInstance();
+}
+```
+
+步骤四：定义抽象工厂的具体实现
+```java
+/**
+ * 苹果工厂
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/31 18:41
+ */
+public class AppleFactory implements FruitFactory {
+
+    @Override
+    public Fruit newInstance() {
+        return new Apple();
+    }
+}
+```
+
+```java
+/**
+ * 香蕉工厂
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/31 18:41
+ */
+public class BananaFactoroy implements FruitFactory {
+
+    @Override
+    public Fruit newInstance() {
+        return new Banana();
+    }
+}
+```
+
+```java
+/**
+ * 西瓜工厂
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/31 18:42
+ */
+public class WatermelonFactory implements FruitFactory {
+
+    @Override
+    public Fruit newInstance() {
+        return new Watermelon();
+    }
+}
+```
+
+步骤五：客户端调用
+```java
+/**
+ * 客户端
+ *
+ * @author:BugKiller
+ * @date:Created in 2019/1/31 18:37
+ */
+public class Client {
+
+    public static void main(String[] args) throws Exception{
+        String[] factoryClasses = {
+                "com.ad.factory.AppleFactory",
+                "com.ad.factory.BananaFactoroy",
+                "com.ad.factory.WatermelonFactory"
+        };
+
+        for (int i = 0; i < factoryClasses.length; i++) {
+            Class<?> cls = Class.forName(factoryClasses[i]);
+            FruitFactory fruitFactory = (FruitFactory) cls.newInstance();
+            Fruit fruit = fruitFactory.newInstance();
+            fruit.process();
+        }
+    }
+}
+```
+
+
+
 ## 3. 抽象工厂模式（Abstract Factory）
+
+### 原理图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+
+### 角色以及职责 
+
+### 适用场景 
+
+### 简单工厂模式分析 
+
+### 实例 
+
+### 类图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
+
+### 编码实现
+
+
 
 ## 4. 单例模式（Singletom）
 
+### 原理图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+
+### 角色以及职责 
+
+### 适用场景 
+
+### 简单工厂模式分析 
+
+### 实例 
+
+### 类图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
+
+### 编码实现
+
+
+
+
+
 ## 5. 创建者模式（Builder）
 
+### 原理图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+
+### 角色以及职责 
+
+### 适用场景 
+
+### 简单工厂模式分析 
+
+### 实例 
+
+### 类图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
+
+### 编码实现
+
+
+
+
+
 ## 6. 原型模式（Prototype）
+
+### 原理图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+
+### 角色以及职责 
+
+### 适用场景 
+
+### 简单工厂模式分析 
+
+### 实例 
+
+### 类图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
+
+### 编码实现
+
+
+
+
+
 
 # 三、结构型模式
 
 ## 1. 适配器模式（Adapter）
 
+### 原理图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+
+### 角色以及职责 
+
+### 适用场景 
+
+### 简单工厂模式分析 
+
+### 实例 
+
+### 类图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
+
+### 编码实现
+
+
+
+
+
+
 ## 2. 外观模式（Facade）
+
+### 原理图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+
+### 角色以及职责 
+
+### 适用场景 
+
+### 简单工厂模式分析 
+
+### 实例 
+
+### 类图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
+
+### 编码实现
+
+
+
+
+
 
 ## 3. 享元模式（Flyweight）
 
+### 原理图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+
+### 角色以及职责 
+
+### 适用场景 
+
+### 简单工厂模式分析 
+
+### 实例 
+
+### 类图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
+
+### 编码实现
+
+
+
+
+
+
 ## 4. 组合模式（Composite）
+
+### 原理图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+
+### 角色以及职责 
+
+### 适用场景 
+
+### 简单工厂模式分析 
+
+### 实例 
+
+### 类图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
+
+### 编码实现
+
+
+
+
+
 
 ## 5. 装饰器模式（Decorator）
 
+### 原理图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+
+### 角色以及职责 
+
+### 适用场景 
+
+### 简单工厂模式分析 
+
+### 实例 
+
+### 类图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
+
+### 编码实现
+
+
+
+
+
+
 ## 6. 代理模式（Proxy）
+
+### 原理图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+
+### 角色以及职责 
+
+### 适用场景 
+
+### 简单工厂模式分析 
+
+### 实例 
+
+### 类图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
+
+### 编码实现
+
+
+
+## 7. 桥接模式（Bridge）
+
+### 原理图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+
+### 角色以及职责 
+
+### 适用场景 
+
+### 简单工厂模式分析 
+
+### 实例 
+
+### 类图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
+
+### 编码实现
+
+
+
 
 # 四、行为型模式
 
 ## 1. 策略模式（Strategy）
 
+### 原理图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+
+### 角色以及职责 
+
+### 适用场景 
+
+### 简单工厂模式分析 
+
+### 实例 
+
+### 类图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
+
+### 编码实现
+
+
+
+
+
 ## 2. 状态模式（State）
+
+### 原理图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+
+### 角色以及职责 
+
+### 适用场景 
+
+### 简单工厂模式分析 
+
+### 实例 
+
+### 类图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
+
+### 编码实现
+
+
+
+
 
 ## 3. 职责链模式（Chain of Responsibility）
 
+### 原理图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+
+### 角色以及职责 
+
+### 适用场景 
+
+### 简单工厂模式分析 
+
+### 实例 
+
+### 类图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
+
+### 编码实现
+
+
+
+
+
+
 ## 4. 观察者模式（Observer）
+
+### 原理图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+
+### 角色以及职责 
+
+### 适用场景 
+
+### 简单工厂模式分析 
+
+### 实例 
+
+### 类图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
+
+### 编码实现
+
+
+
+
+
 
 ## 5. 模板方法模式（Template Method）
 
+### 原理图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+
+### 角色以及职责 
+
+### 适用场景 
+
+### 简单工厂模式分析 
+
+### 实例 
+
+### 类图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
+
+### 编码实现
+
+
+
+
+
+
 ## 6. 命令模式（Command）
+
+### 原理图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+
+### 角色以及职责 
+
+### 适用场景 
+
+### 简单工厂模式分析 
+
+### 实例 
+
+### 类图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
+
+### 编码实现
+
+
+
+
+
 
 ## 7. 备忘录模式（Memento）
 
+### 原理图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+
+### 角色以及职责 
+
+### 适用场景 
+
+### 简单工厂模式分析 
+
+### 实例 
+
+### 类图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
+
+### 编码实现
+
+
+
+
+
+
 ## 8. 迭代器模式（Iterator）
+
+### 原理图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+
+### 角色以及职责 
+
+### 适用场景 
+
+### 简单工厂模式分析 
+
+### 实例 
+
+### 类图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
+
+### 编码实现
+
+
+
+
+
 
 ## 9. 调停者模式（Mediator）
 
+### 原理图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+
+### 角色以及职责 
+
+### 适用场景 
+
+### 简单工厂模式分析 
+
+### 实例 
+
+### 类图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
+
+### 编码实现
+
+
+
+
+
 ## 10. 解释器模式（Interpreter）
 
+### 原理图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+
+### 角色以及职责 
+
+### 适用场景 
+
+### 简单工厂模式分析 
+
+### 实例 
+
+### 类图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
+
+### 编码实现
+
+
+
+
+
+
 ## 11. 访问者模式（Visitor）
+
+### 原理图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+
+### 角色以及职责 
+
+### 适用场景 
+
+### 简单工厂模式分析 
+
+### 实例 
+
+### 类图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
+
+### 编码实现
+
+
+
 
 
 
