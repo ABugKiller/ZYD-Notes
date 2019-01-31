@@ -71,8 +71,173 @@
 
 ## 1. 简单工厂模式（Simple Factory）
 
-###原理图
+### 原理图
 <div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+
+### 角色以及职责 
+* 抽象产品： 工厂产物的抽象。工厂要创建的实例类都继承于此抽象产品。 
+* 具体产品： 工厂的具体产品。所有的具体产品都是抽象产品的一个实现类。 
+* 工厂： 创建产品实例的类。这个类负责创建具体产品的实例，并对客户端隐藏创建过程的细节。 
+
+### 适用场景 
+创建对象的过程比较麻烦，客户端并不关心具体有多少种实现而只希望获得一个能够满足他的需求的实例的引用，然后客户端可以通过公共的接口去使用这个产品。 
+
+### 简单工厂模式分析 
+简单工厂模式是客户端与抽象接口实现解耦的最简单直接的方式。通过引入工厂这个角色，客户端可以不用任何具体产品的创建细节。客户端需要一种具体的实例的时候，只需要通知工厂。具体工厂是如何生产的，以及生产过程中涉及到了哪些工厂内部的角色，客户端可以统统不用关心。当具体的某种产品需要修改时，只需要修改对应的实现类和工厂就可以了。 
+
+这个模式存在的问题，即实现类的创建过程修改了之后，有时工厂的实现也得跟着修改。虽然对客户端的接口是保持不变的，但是对工厂本身的修改还是有点不符合开闭原则。解决这个问题的答案是工厂方法模式。
+
+### 实例 
+本文将以一个创建“运载工具”的实例的例子来介绍简单工厂模式。 
+
+### 类图
+<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="500"/> </div><br>
+
+### 编码实现
+步骤一：定义好工厂要生成的产品的抽象
+```
+/**
+ * 水果的抽象
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/30 22:15
+ */
+public abstract class Fruit {
+
+    /**
+     * 谁谁谁吃什么水果
+     * @author:ABugKiller
+     * @date:Created in 2019/1/30 22:20
+     * @Param: name  姓名
+     * @return:
+     */
+    public abstract void eatFruit(String name);
+}
+```
+
+步骤二：给抽象的产品定义集中具体的实现
+```aidl
+/**
+ * Apple
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/30 22:24
+ */
+public class Apple extends Fruit {
+
+    @Override
+    public void eatFruit(String name) {
+        System.out.println(String.format("%s吃苹果", name));
+    }
+}
+```
+```aidl
+/**
+ * 香蕉
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/30 22:26
+ */
+public class Banana extends Fruit {
+
+    @Override
+    public void eatFruit(String name) {
+        System.out.println(String.format("%s吃香蕉", name));
+    }
+}
+```
+```aidl
+/**
+ * 西瓜
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/30 22:25
+ */
+public class Watermelon extends Fruit {
+
+    @Override
+    public void eatFruit(String name) {
+        System.out.println(String.format("%s吃西瓜", name));
+    }
+}
+```
+
+步骤三：定义一个水果类型的枚举
+```aidl
+/**
+ * 水果类型的枚举
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/30 22:11
+ */
+public enum FruitType {
+
+    /**
+     * 苹果
+     */
+    APPLE,
+
+    /**
+     * 香蕉
+     */
+    BANANA,
+
+    /**
+     * 西瓜
+     */
+    WATERMELON
+}
+```
+
+步骤四：定义水果的工厂
+```aidl
+/**
+ * 水果的工厂
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/30 22:27
+ */
+public class FruitFactory {
+    public static Fruit getFruit(FruitType type) {
+        switch (type) {
+            case APPLE:
+                return new Apple();
+            case BANANA:
+                return new Banana();
+            case WATERMELON:
+                return new Watermelon();
+            default:
+                throw new IllegalArgumentException("未知水果类型");
+        }
+    }
+}
+```
+
+步骤五：调用工厂的客户端
+```aidl
+/**
+ * 客户端调用
+ *
+ * @author:BugKiller
+ * @date:Created in 2019/1/30 22:07
+ */
+public class Client {
+
+    public static void main(String[] args) {
+        //ad吃苹果
+        Fruit fruit = FruitFactory.getFruit(FruitType.APPLE);
+        fruit.eatFruit("ad");
+        //ad吃香蕉
+        fruit = FruitFactory.getFruit(FruitType.BANANA);
+        fruit.eatFruit("ad");
+        //ad吃西瓜
+        fruit = FruitFactory.getFruit(FruitType.WATERMELON);
+        fruit.eatFruit("ad");
+    }
+}
+
+```
+
 
 ## 2. 工厂方法模式（Factory Method）
 
