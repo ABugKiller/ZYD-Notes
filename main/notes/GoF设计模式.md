@@ -2,31 +2,31 @@
 * [一、概述](#一概述)
 * [二、创建型模式](#二创建型模式)
     * [1. 简单工厂模式（Simple Factory）](#1-简单工厂模式simple-factory)
-    * [2. 工厂方法模式（Factory Method）](#2.-工厂方法模式（factory-method）)
-    * [3. 抽象工厂模式（Abstract Factory）](#3.-抽象工厂模式（abstract-factory）)
-    * [4. 单例模式（Singletom）](#4.-单例模式（singletom）)
-    * [5. 创建者模式（Builder）](#5.-创建者模式（builder）)
-    * [6. 原型模式（Prototype）](#6.-原型模式（prototype）)
+    * [2. 工厂方法模式（Factory Method）](#2-工厂方法模式factory-method)
+    * [3. 抽象工厂模式（Abstract Factory）](#3-抽象工厂模式abstract-factory)
+    * [4. 单例模式（Singletom）](#4-单例模式singletom)
+    * [5. 创建者模式（Builder）](#5-创建者模式builder)
+    * [6. 原型模式（Prototype）](#6-原型模式prototype)
 * [三、结构型模式](#三结构型模式)
-    * [1. 适配器模式（Adapter）](#1.-适配器模式（adapter）)
-    * [2. 外观模式（Facade）](#2.-外观模式（facade）)
-    * [3. 享元模式（Flyweight）](#3.-享元模式（flyweight）)
-    * [4. 组合模式（Composite）](#4.-组合模式（composite）)
-    * [5. 装饰器模式（Decorator）](#5.-装饰器模式（decorator）)
-    * [6. 代理模式（Proxy）](#6.-代理模式（proxy）)
-    * [7. 桥接模式（Bridge）](#7.-桥接模式（bridge）)
+    * [1. 适配器模式（Adapter）](#1-适配器模式adapter)
+    * [2. 外观模式（Facade）](#2-外观模式facade)
+    * [3. 享元模式（Flyweight）](#3-享元模式flyweight)
+    * [4. 组合模式（Composite）](#4-组合模式composite)
+    * [5. 装饰器模式（Decorator）](#5-装饰器模式decorator)
+    * [6. 代理模式（Proxy）](#6-代理模式proxy)
+    * [7. 桥接模式（Bridge）](#7-桥接模式bridge)
 * [四、行为型模式](#四行为型模式)
-    * [1. 策略模式（Strategy）](#1.-策略模式（strategy）)
-    * [2. 状态模式（State）](#2.-状态模式（state）)
-    * [3. 职责链模式（Chain of Responsibility）](#3.-职责链模式（chain-of-responsibility）)
-    * [4. 观察者模式（Observer）](#4.-观察者模式（observer）)
-    * [5. 模板方法模式（Template Method）](#5.-模板方法模式（template-method）)
-    * [6. 命令模式（Command）](#6.-命令模式（command）)
-    * [7. 备忘录模式（Memento）](#7.-备忘录模式（memento）)
-    * [8. 迭代器模式（Iterator）](#8.-迭代器模式（iterator）)
-    * [9. 调停者模式（Mediator）](#9.-调停者模式（mediator）)
-    * [10. 解释器模式（Interpreter）](#10.-解释器模式（interpreter）)
-    * [11. 访问者模式（Visitor）](#11.-访问者模式（visitor）)
+    * [1. 策略模式（Strategy）](#1-策略模式strategy)
+    * [2. 状态模式（State）](#2-状态模式state)
+    * [3. 职责链模式（Chain of Responsibility）](#3-职责链模式chain-of-responsibility)
+    * [4. 观察者模式（Observer）](#4-观察者模式observer)
+    * [5. 模板方法模式（Template Method）](#5-模板方法模式template-method)
+    * [6. 命令模式（Command）](#6-命令模式command)
+    * [7. 备忘录模式（Memento）](#7-备忘录模式memento)
+    * [8. 迭代器模式（Iterator）](#8-迭代器模式iterator)
+    * [9. 调停者模式（Mediator）](#9-调停者模式mediator)
+    * [10. 解释器模式（Interpreter）](#10-解释器模式interpreter)
+    * [11. 访问者模式（Visitor）](#11-访问者模式visitor)
 * [参考资料](#参考资料)
 <!-- GFM-TOC -->
 
@@ -422,25 +422,301 @@ public class Client {
 ```
 
 
-
 ## 3. 抽象工厂模式（Abstract Factory）
 
 ### 原理图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+<div align="center"> <img src="pics/design-pattern/3-抽象工厂模式原理图.png" width="750"/> </div><br>
 
 ### 角色以及职责 
+* 抽象产品： 工厂产物的抽象。由工厂创建的所有系列产品都集成自这些抽象产品。 
+* 具体产品： 工厂的具体产品。所有的具体产品都是抽象产品的一个实现类。 
+* 抽象工厂： 工厂类的抽象。 
+* 具体工厂： 创建产品实例的具体工厂类。可以理解为产品的具体的“供应商”。
 
 ### 适用场景 
+客户端用到的多个产品之间相互关联，并且客户端不希望与当前用到的系列产品直接“绑定”，希望可以灵活的切换系列产品的“供应商”。
 
 ### 简单工厂模式分析 
+抽象工厂本质上是一个产品族的“供应商”，通过抽象供应商和产品的方式，将客户端与产品族和“供应商”解耦。抽象工厂模式可以非常容易的实现切换系列产品的“供应商”。
+
+缺点是如果后面增加了产品的话，会导致所有的工厂都需要修改！所以应用抽象工厂模式的时候，需要注意这点！很多前辈说抽象工厂模式是工厂方法模式的升级版，但是我并不这么认为。工厂方法模式是对单一种类的抽象产品的不同具体实现的创建过程进行的抽象，而抽象工厂模式是对系列产品的创建过程进行的抽象。前者为了方便扩展其他的具体产品，后者是为了方便将整个产品族整体切换为其他“供应商”。
 
 ### 实例 
-
-### 类图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
+这里通过一个数码设备工厂来演示抽象工厂模式的用法。数码设备工厂是生产数码设备的工厂的抽象，在本例中有两个实现，一个是苹果公司的工厂，一个是三星公司的工厂。所要创建的产品在本例中有三种，笔记本电脑、智能手机、平板电脑。
 
 ### 编码实现
+步骤一：定义三种抽象产品
+```java
+/**
+ * 笔记本电脑
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/31 19:55
+ */
+public interface Laptop {
+    /**
+     * 编程
+     * @author:ABugKiller
+     * @date:Created in 2019/1/31 21:13
+     * @return:
+     */
+    public void coding(String operator);
+}
+```
 
+```java
+/**
+ * 平板电脑
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/31 19:59
+ */
+public interface Pad {
+
+    /**
+     * 玩游戏
+     * @author:ABugKiller
+     * @date:Created in 2019/1/31 21:14
+     * @return:
+     */
+    public void playGame();
+}
+```
+
+```java
+/**
+ * 手机
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/31 19:56
+ */
+public interface Phone {
+
+    /**
+     * 设置拥有者
+     * @author:ABugKiller
+     * @date:Created in 2019/1/31 21:14
+     * @return:
+     */
+    public void setOwner(String owner);
+
+    /**
+     * 打电话
+     * @author:ABugKiller
+     * @date:Created in 2019/1/31 21:15
+     * @return:
+     */
+    public void call();
+}
+```
+
+步骤二：定义苹果公司的工厂生产的具体产品
+
+```java
+/**
+ * 苹果电脑
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/31 20:00
+ */
+public class MacBook implements Laptop {
+    @Override
+    public void coding(String operator) {
+        System.out.println("用Mac撸代码");
+    }
+}
+```
+
+```java
+/**
+ * 苹果手机
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/31 20:01
+ */
+public class IPhone implements Phone {
+
+    private String owner;
+
+    @Override
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    @Override
+    public void call() {
+        System.out.println(String.format("%s在用IPhone打电话！", this.owner));
+    }
+}
+```
+
+```java
+/**
+ * 苹果手表
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/31 20:04
+ */
+public class IPad implements Pad {
+    @Override
+    public void playGame() {
+        System.out.println("用IPad玩游戏");
+    }
+}
+```
+
+步骤三：定义三星公司的工厂生产的具体产品
+```java
+/**
+ * 三星电脑
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/31 20:00
+ */
+public class SamsungNoteBook implements Laptop {
+    @Override
+    public void coding(String operator) {
+        System.out.println("用三星电脑撸代码");
+    }
+}
+```
+```java
+/**
+ * 三星手机
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/31 20:03
+ */
+public class SamsungGalaxy implements Phone {
+
+    private String owner;
+
+    @Override
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    @Override
+    public void call() {
+        System.out.println(String.format("%s在用三星手机打电话！", this.owner));
+    }
+}
+```
+
+```java
+/**
+ * 三星平板
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/31 20:05
+ */
+public class SamsungPad implements Pad {
+    @Override
+    public void playGame() {
+        System.out.println("用三星平板玩游戏");
+    }
+}
+```
+
+步骤四：定义抽象工厂及实现类
+```java
+/**
+ * 数码设备工厂
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/31 19:54
+ */
+public interface DigitalEquipmentFactory {
+    //生产笔记本电脑
+    public Laptop manufactureLaptop();
+    //生产手机
+    public Phone manufacturePhone();
+    //生产平板电脑
+    public Pad manufacturePad();
+}
+```
+
+```java
+/**
+ * 苹果工厂
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/31 20:09
+ */
+public class AppleFactory implements DigitalEquipmentFactory {
+    @Override
+    public Laptop manufactureLaptop() {
+        return new MacBook();
+    }
+
+    @Override
+    public Phone manufacturePhone() {
+        return new IPhone();
+    }
+
+    @Override
+    public Pad manufacturePad() {
+        return new IPad();
+    }
+}
+```
+
+```java
+/**
+ * 三星工厂
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/31 20:10
+ */
+public class SamsungFactory implements DigitalEquipmentFactory {
+    @Override
+    public Laptop manufactureLaptop() {
+        return new SamsungNoteBook();
+    }
+
+    @Override
+    public Phone manufacturePhone() {
+        return new SamsungGalaxy();
+    }
+
+    @Override
+    public Pad manufacturePad() {
+        return new SamsungPad();
+    }
+}
+```
+
+步骤四：客户端
+```java
+/**
+ * 客户端
+ *
+ * @author:ABugKiller
+ * @date:Created in 2019/1/31 19:26
+ */
+public class Client {
+    public static void main(String[] args) throws Exception {
+
+        String[] factoryClasses = {
+                "com.ad.factory.AppleFactory",
+                "com.ad.factory.SamsungFactory"
+        };
+
+        for (int i = 0; i < factoryClasses.length; i++) {
+            System.out.println(factoryClasses[i]);
+            Class<?> cls = Class.forName(factoryClasses[i]);
+            DigitalEquipmentFactory factory = (DigitalEquipmentFactory) cls.newInstance();
+            Laptop laptop = factory.manufactureLaptop();
+            laptop.coding("ad");
+            Pad pad = factory.manufacturePad();
+            pad.playGame();
+            Phone phone = factory.manufacturePhone();
+            phone.setOwner("ad");
+            phone.call();
+        }
+    }
+}
+```
 
 
 ## 4. 单例模式（Singletom）
