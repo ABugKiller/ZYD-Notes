@@ -91,7 +91,7 @@
 本文将以一个创建“运载工具”的实例的例子来介绍简单工厂模式。 
 
 ### 类图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="500"/> </div><br>
+<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
 
 ### 编码实现
 步骤一：定义好工厂要生成的产品的抽象
