@@ -236,6 +236,13 @@ public class Client {
 }
 ```
 
+运行结果：
+```java
+ad吃苹果
+ad吃香蕉
+ad吃西瓜
+```
+
 
 ## 2. 工厂方法模式（Factory Method）
 
@@ -421,6 +428,12 @@ public class Client {
 }
 ```
 
+运行结果：
+```java
+苹果加工完毕
+香蕉加工完毕
+西瓜加工完毕
+```
 
 ## 3. 抽象工厂模式（Abstract Factory）
 
@@ -436,7 +449,7 @@ public class Client {
 ### 适用场景 
 客户端用到的多个产品之间相互关联，并且客户端不希望与当前用到的系列产品直接“绑定”，希望可以灵活的切换系列产品的“供应商”。
 
-### 简单工厂模式分析 
+### 抽象工厂模式分析 
 抽象工厂本质上是一个产品族的“供应商”，通过抽象供应商和产品的方式，将客户端与产品族和“供应商”解耦。抽象工厂模式可以非常容易的实现切换系列产品的“供应商”。
 
 缺点是如果后面增加了产品的话，会导致所有的工厂都需要修改！所以应用抽象工厂模式的时候，需要注意这点！很多前辈说抽象工厂模式是工厂方法模式的升级版，但是我并不这么认为。工厂方法模式是对单一种类的抽象产品的不同具体实现的创建过程进行的抽象，而抽象工厂模式是对系列产品的创建过程进行的抽象。前者为了方便扩展其他的具体产品，后者是为了方便将整个产品族整体切换为其他“供应商”。
@@ -718,24 +731,172 @@ public class Client {
 }
 ```
 
+运行结果：
+```java
+com.ad.factory.AppleFactory
+用Mac撸代码
+用IPad玩游戏
+ad在用IPhone打电话！
+com.ad.factory.SamsungFactory
+用三星电脑撸代码
+用三星平板玩游戏
+ad在用三星手机打电话！
+```
 
 ## 4. 单例模式（Singletom）
 
 ### 原理图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂模式原理图.png" width="500"/> </div><br>
+<div align="center"> <img src="pics/design-pattern/4-单例模式原理图.png" width="500"/> </div><br>
 
 ### 角色以及职责 
+* 单例类： 单例模式只有一个类！这里把它叫单例类了。
 
 ### 适用场景 
+单例模式用于创建整个程序中只允许存在一个实例的类的对象。单例模式确保可以在程序中任意地方访问同一个对象，适合用于全局共享的对象。
 
-### 简单工厂模式分析 
+### 单例模式分析 
 
-### 实例 
+**饿汉模式**： 在第一次引用该类的时候就创建对象实例，而不管实际是否需要创建。
+```java
+public class Singleton {
+    private static Singleton singleton = new Singleton();
+    private Singleton() {}
+    public static Singleton getSignleton(){
 
-### 类图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
+        return singleton;
+    }
+}
+```
 
-### 编码实现
+**单线程写法**：由私有构造器和一个公有静态工厂方法构成，在工厂方法中对singleton进行null判断，如果是null就new一个出来，最后返回singleton对象。这种方法可以实现延时加载，但是有一个致命弱点：线程不安全。如果有两条线程同时调用getSingleton()方法，就有很大可能导致重复创建对象。
+```java
+public class Singleton {
+    private static Singleton singleton = null;
+    private Singleton(){}
+    public static Singleton getSingleton() {
+        if(singleton == null) 
+            singleton = new Singleton();
+        return singleton;
+    }
+}
+```
+
+**考虑线程安全的写法**：对singleton的null判断以及new的部分使用synchronized进行加锁。同时，对singleton对象使用volatile关键字进行限制，保证其对所有线程的可见性，并且禁止对其进行指令重排序优化。
+```java
+public class Singleton {
+    private static volatile Singleton singleton = null;
+    private Singleton(){}
+    public static Singleton getSingleton(){
+        synchronized (Singleton.class){
+            if(singleton == null){
+                singleton = new Singleton();
+            }
+        }
+        return singleton;
+    }
+}
+```
+
+**兼顾线程安全和效率的写法( 双重检查锁 )**：上面这种写法效率低下，每次调用getSingleton()方法，都必须在synchronized这里进行排队，而真正遇到需要new的情况是非常少的。
+```java
+public class Singleton {
+    private static volatile Singleton singleton = null;
+    private Singleton(){}
+    public static Singleton getSingleton(){
+        if(singleton == null){
+            synchronized (Singleton.class){
+                if(singleton == null){
+                    singleton = new Singleton();
+                }
+            }
+        }
+        return singleton;
+    }
+}
+```
+从语义角度来看，并没有什么问题。但是其实还是有坑。
+
+volatile 关键字有两层语义。
+
+   1、第一层语义就是`可见性`。可见性指的是在一个线程中对该变量的修改会马上由工作内存（Work Memory）写回主内存（Main Memory），所以会马上反应在其它线程的读取操作中。顺便一提，工作内存和主内存可以近似理解为实际电脑中的高速缓存和主存，工作内存是线程独享的，主存是线程共享的。
+   
+   2、 第二层语义是`禁止指令重排序优化`。大家知道我们写的代码（尤其是多线程代码），由于编译器优化，在实际执行的时候可能与我们编写的顺序不同。编译器只保证程序执行结果与源代码相同，却不保证实际指令的顺序与源代码相同。这在单线程看起来没什么问题，然而一旦引入多线程，这种乱序就可能导致严重问题。volatile关键字就可以从语义上解决这个问题。
+
+
+注意，前面反复提到“从语义上讲是没有问题的”，但是禁止指令重排优化这条语义直到jdk1.5以后才能正确工作。此前的JDK中即使将变量声明为volatile也无法完全避免重排序所导致的问题。所以，在jdk1.5版本前，双重检查锁形式的单例模式是无法保证线程安全的。
+
+**静态内部类法**：有没有一种延时加载，并且能保证线程安全的简单写法呢？我们可以把Singleton实例放到一个静态内部类中，这样就避免了静态实例在Singleton类加载的时候就创建对象，并且由于静态内部类只会被加载一次，所以这种写法也是线程安全的。
+```java
+public class Singleton {
+    private static class Holder {
+        private static Singleton singleton = new Singleton();
+    }
+    private Singleton(){}
+    public static Singleton getSingleton(){
+        return Holder.singleton;
+    }
+}
+```
+
+但是，上面提到的所有实现方式都有两个共同的缺点：
+	
+   * 都需要额外的工作(Serializable、transient、readResolve())来实现序列化，否则每次反序列化一个序列化的对象实例时都会创建一个新的实例。
+    
+   这种情况也会出现过个实例的问题，这个问题可以在类中添加readResolve( )方法来避免，即：
+```java
+class SingletonB implements Serializable {
+    
+    private static SingletonB instance = new SingletonB();
+    
+    private SingletonB() {
+        
+    }
+    
+    public static SingletonB getInstance() {
+        return instance;
+    }
+    
+    //不添加该方法 反序列化时会出现多个实例的问题
+    public Object readResolve() {
+        
+    }
+}
+```
+   * 这样在反序列化的时候就不会出现多个实例。
+   * 可能会有人使用反射强行调用我们的私有构造器（如果要避免这种情况，可以修改构造器，让它在创建第二个实例的时候抛异常）。
+
+**枚举写法（1.5之后出现）**：还有一种更加优雅的方法来实现单例模式，那就是枚举写法， 使用枚举除了线程安全和防止反射强行调用构造器之外，还提供了自动序列化机制，防止反序列化的时候创建新的对象。因此，Effective Java推荐尽可能地使用枚举来实现单例。
+```java
+class Resource{
+}
+
+
+public enum SomeThing {
+    INSTANCE;
+    private Resource instance;
+    SomeThing() {
+        instance = new Resource();
+    }
+    public Resource getInstance() {
+        return instance;
+    }
+}
+```
+
+上面的类Resource是我们要应用单例模式的资源，具体可以表现为网络连接，数据库连接，线程池等等。
+
+获取资源的方式很简单，只要 SomeThing.INSTANCE.getInstance() 即可获得所要实例。下面我们来看看单例是如何被保证的：
+
+首先，在枚举中我们明确了构造方法限制为私有，在我们访问枚举实例时会执行构造方法，同时每个枚举实例都是static final类型的，也就表明只能被实例化一次。在调用构造方法时，我们的单例被实例化。
+
+也就是说，因为enum中的实例被保证只会被实例化一次，所以我们的INSTANCE也被保证实例化一次。
+
+可以看到，枚举实现单例还是比较简单的，除此之外我们再来看一下Enum这个类的声明：
+
+public abstract class Enum<E extends Enum<E>> implements Comparable<E>, Serializable
+
+可以看到，枚举也提供了序列化机制。
+
 
 
 
@@ -750,12 +911,9 @@ public class Client {
 
 ### 适用场景 
 
-### 简单工厂模式分析 
+### 创建者模式分析 
 
 ### 实例 
-
-### 类图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
 
 ### 编码实现
 
@@ -772,12 +930,9 @@ public class Client {
 
 ### 适用场景 
 
-### 简单工厂模式分析 
+### 原型模式分析 
 
 ### 实例 
-
-### 类图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
 
 ### 编码实现
 
@@ -797,12 +952,9 @@ public class Client {
 
 ### 适用场景 
 
-### 简单工厂模式分析 
+### 适配器模式分析 
 
 ### 实例 
-
-### 类图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
 
 ### 编码实现
 
@@ -820,12 +972,9 @@ public class Client {
 
 ### 适用场景 
 
-### 简单工厂模式分析 
+### 外观模式分析 
 
 ### 实例 
-
-### 类图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
 
 ### 编码实现
 
@@ -843,12 +992,9 @@ public class Client {
 
 ### 适用场景 
 
-### 简单工厂模式分析 
+### 享元模式分析 
 
 ### 实例 
-
-### 类图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
 
 ### 编码实现
 
@@ -866,12 +1012,9 @@ public class Client {
 
 ### 适用场景 
 
-### 简单工厂模式分析 
+### 组合模式分析 
 
 ### 实例 
-
-### 类图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
 
 ### 编码实现
 
@@ -889,12 +1032,9 @@ public class Client {
 
 ### 适用场景 
 
-### 简单工厂模式分析 
+### 装饰器模式分析 
 
 ### 实例 
-
-### 类图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
 
 ### 编码实现
 
@@ -912,12 +1052,9 @@ public class Client {
 
 ### 适用场景 
 
-### 简单工厂模式分析 
+### 代理模式分析 
 
 ### 实例 
-
-### 类图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
 
 ### 编码实现
 
@@ -932,12 +1069,9 @@ public class Client {
 
 ### 适用场景 
 
-### 简单工厂模式分析 
+### 桥接模式分析 
 
 ### 实例 
-
-### 类图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
 
 ### 编码实现
 
@@ -955,12 +1089,9 @@ public class Client {
 
 ### 适用场景 
 
-### 简单工厂模式分析 
+### 策略模式分析 
 
 ### 实例 
-
-### 类图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
 
 ### 编码实现
 
@@ -977,12 +1108,9 @@ public class Client {
 
 ### 适用场景 
 
-### 简单工厂模式分析 
+### 状态模式分析 
 
 ### 实例 
-
-### 类图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
 
 ### 编码实现
 
@@ -999,12 +1127,9 @@ public class Client {
 
 ### 适用场景 
 
-### 简单工厂模式分析 
+### 职责链模式分析 
 
 ### 实例 
-
-### 类图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
 
 ### 编码实现
 
@@ -1022,12 +1147,9 @@ public class Client {
 
 ### 适用场景 
 
-### 简单工厂模式分析 
+### 观察者模式分析 
 
 ### 实例 
-
-### 类图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
 
 ### 编码实现
 
@@ -1045,12 +1167,9 @@ public class Client {
 
 ### 适用场景 
 
-### 简单工厂模式分析 
+### 模板方法模式分析 
 
 ### 实例 
-
-### 类图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
 
 ### 编码实现
 
@@ -1068,12 +1187,9 @@ public class Client {
 
 ### 适用场景 
 
-### 简单工厂模式分析 
+### 命令模式分析 
 
 ### 实例 
-
-### 类图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
 
 ### 编码实现
 
@@ -1091,12 +1207,9 @@ public class Client {
 
 ### 适用场景 
 
-### 简单工厂模式分析 
+### 备忘录模式分析 
 
 ### 实例 
-
-### 类图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
 
 ### 编码实现
 
@@ -1114,12 +1227,9 @@ public class Client {
 
 ### 适用场景 
 
-### 简单工厂模式分析 
+### 迭代器模式分析 
 
 ### 实例 
-
-### 类图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
 
 ### 编码实现
 
@@ -1137,12 +1247,9 @@ public class Client {
 
 ### 适用场景 
 
-### 简单工厂模式分析 
+### 调停者模式分析 
 
 ### 实例 
-
-### 类图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
 
 ### 编码实现
 
@@ -1159,12 +1266,9 @@ public class Client {
 
 ### 适用场景 
 
-### 简单工厂模式分析 
+### 解释器模式分析 
 
 ### 实例 
-
-### 类图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
 
 ### 编码实现
 
@@ -1182,12 +1286,9 @@ public class Client {
 
 ### 适用场景 
 
-### 简单工厂模式分析 
+### 访问者模式分析 
 
 ### 实例 
-
-### 类图
-<div align="center"> <img src="pics/design-pattern/1-简单工厂实例图.png" width="750"/> </div><br>
 
 ### 编码实现
 
