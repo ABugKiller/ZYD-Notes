@@ -15,9 +15,11 @@
 -->
 
 
-## :OOP: 面向对象
-
+## :ghost: 面向对象
+- [面向对象思想](https://github.com/ABugKiller/ZYD-Notes/blob/master/main/notes/面向对象思想.md)
 - [GoF设计模式](https://github.com/ABugKiller/ZYD-Notes/blob/master/main/notes/GoF设计模式.md)
+
+## :computer: 分布式专题
 
 
 ## :memo: 后记 
